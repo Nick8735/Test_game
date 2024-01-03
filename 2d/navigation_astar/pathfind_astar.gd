@@ -1,4 +1,5 @@
 extends TileMap
+class_name PathFindAStar
 
 enum Tile { OBSTACLE, START_POINT, END_POINT }
 
@@ -7,11 +8,11 @@ const BASE_LINE_WIDTH = 3.0
 const DRAW_COLOR = Color.WHITE
 
 # The object for pathfinding on 2D grids.
-var _astar = AStarGrid2D.new()
+var _astar := AStarGrid2D.new()
 
-var _start_point = Vector2i()
-var _end_point = Vector2i()
-var _path = PackedVector2Array()
+var _start_point := Vector2i()
+var _end_point := Vector2i()
+var _path := PackedVector2Array()
 
 func _ready():
 	_astar.region = get_used_rect()
@@ -24,7 +25,7 @@ func _ready():
 
 	for i in range(_astar.region.position.x, _astar.region.end.x):
 		for j in range(_astar.region.position.y, _astar.region.end.y):
-			var pos = Vector2i(i, j)
+			var pos := Vector2i(i, j)
 			if get_cell_source_id(0, pos) == Tile.OBSTACLE:
 				_astar.set_point_solid(pos)
 
@@ -41,18 +42,18 @@ func _draw():
 		last_point = current_point
 
 
-func round_local_position(local_position):
+func round_local_position(local_position: Vector2) -> Vector2:
 	return map_to_local(local_to_map(local_position))
 
 
-func is_point_walkable(local_position):
-	var map_position = local_to_map(local_position)
+func is_point_walkable(local_position: Vector2) -> bool:
+	var map_position := local_to_map(local_position)
 	if _astar.is_in_boundsv(map_position):
 		return not _astar.is_point_solid(map_position)
 	return false
 
 
-func clear_path():
+func clear_path() -> void:
 	if not _path.is_empty():
 		_path.clear()
 		erase_cell(0, _start_point)
@@ -61,7 +62,7 @@ func clear_path():
 		queue_redraw()
 
 
-func find_path(local_start_point, local_end_point):
+func find_path(local_start_point: Vector2, local_end_point: Vector2) -> PackedVector2Array:
 	clear_path()
 
 	_start_point = local_to_map(local_start_point)

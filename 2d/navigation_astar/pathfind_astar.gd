@@ -1,5 +1,4 @@
 extends TileMap
-class_name PathFindAStar
 
 enum Tile { OBSTACLE, START_POINT, END_POINT }
 
@@ -14,7 +13,7 @@ var _start_point := Vector2i()
 var _end_point := Vector2i()
 var _path := PackedVector2Array()
 
-func _ready():
+func _ready() -> void:
 	_astar.region = get_used_rect()
 	_astar.cell_size = CELL_SIZE
 	_astar.offset = CELL_SIZE * 0.5
@@ -30,13 +29,13 @@ func _ready():
 				_astar.set_point_solid(pos)
 
 
-func _draw():
+func _draw() -> void:
 	if _path.is_empty():
 		return
 
-	var last_point = _path[0]
+	var last_point := _path[0]
 	for index in range(1, len(_path)):
-		var current_point = _path[index]
+		var current_point := _path[index]
 		draw_line(last_point, current_point, DRAW_COLOR, BASE_LINE_WIDTH, true)
 		draw_circle(current_point, BASE_LINE_WIDTH * 2.0, DRAW_COLOR)
 		last_point = current_point
